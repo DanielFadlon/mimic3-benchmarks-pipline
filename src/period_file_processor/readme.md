@@ -107,6 +107,6 @@ Includes metadata columns like:
 - `pandas`
 - `numpy`
 - `concurrent.futures`
-- Custom modules: `get_reader`, `string_values_handler`
+- Custom modules: `get_reader`, `gsw_string_values_handler`
 
 ---
