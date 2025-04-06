@@ -1,0 +1,7 @@
+{
+    "default": "max",
+    "Glascow_coma_scale_eye_opening": "min",
+    "Glascow_coma_scale_motor_response": "min",
+    "Glascow_coma_scale_total": "min",
+    "Glascow_coma_scale_verbal_response": "min"
+}
