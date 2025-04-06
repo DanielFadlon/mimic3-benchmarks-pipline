@@ -2,7 +2,7 @@
 
 The **PeriodFileProcessor** is a flexible, multi-threaded framework for processing healthcare episodes stored in files. It is designed to extract structured, time-based data slices ("periods") from a large set of patient files, producing a consolidated dataset per set type (e.g., train, test, val).
 
-Specifically, for **Decompensation** and **length-of-stay** tasks (periods are explicitly mention for each case).
+Specifically, for **Decompensation** and **length-of-stay** tasks (periods are explicitly mentioned for each case).
 This class serves as a base class. To use it, subclass it and implement the `process_instance()` method.
 
 ---
