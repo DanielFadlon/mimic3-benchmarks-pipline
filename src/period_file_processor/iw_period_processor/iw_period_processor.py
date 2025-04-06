@@ -3,7 +3,7 @@ from typing import Dict, Optional, Callable
 import numpy as np
 import pandas as pd
 from src.file_utils import load_json
-from src.period_file_processor.string_values_handler import number_to_gsw_str
+from src.gsw_string_values_handler import number_to_gsw_str
 from src.period_file_processor.period_file_processor import PeriodFileProcessor
 
 HOURS_TEMP_COLUMN_NAME = 'hours_tmp'
