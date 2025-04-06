@@ -48,7 +48,7 @@ def unique_handle_for_non_numeric_gsw(df: pd.DataFrame):
     return df
 
 
-def number_to_gsw_str(col_name, number):
+def number_to_gsw_str(col_name, number, with_num_in_str = False):
     if pd.isna(number):
         return number
 
@@ -76,4 +76,10 @@ def number_to_gsw_str(col_name, number):
             1: 'No response',
         },
     }
-    return map_n_to_gsw[col_name][number]
+
+    res = map_n_to_gsw[col_name][number]
+
+    if with_num_in_str:
+        return f'{number} {res}'
+
+    return res
