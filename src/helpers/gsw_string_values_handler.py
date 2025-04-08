@@ -10,7 +10,7 @@ def unique_handle_for_non_numeric_gsw(df: pd.DataFrame):
             'To Pain': '2 To Pain',
             'No response': '1 No response',
         }
-        df['Glascow_coma_scale_eye_opening'].replace(value_mapping, inplace=True)
+        df['Glascow_coma_scale_eye_opening'] = df['Glascow_coma_scale_eye_opening'].replace(value_mapping)
         non_digit_count = df['Glascow_coma_scale_eye_opening'].str.match(r'^[^\d]').sum()
         if non_digit_count > 0:
             print("WARNING - Glascow_coma_scale_eye_opening --- non digit start value counts -- ", non_digit_count)
@@ -24,7 +24,7 @@ def unique_handle_for_non_numeric_gsw(df: pd.DataFrame):
             'Abnormal extension': '2 Abnormal extension',
             'No response': '1 No response'
         }
-        df['Glascow_coma_scale_motor_response'].replace(value_mapping, inplace=True)
+        df['Glascow_coma_scale_motor_response'] = df['Glascow_coma_scale_motor_response'].replace(value_mapping)
         non_digit_count = df['Glascow_coma_scale_motor_response'].str.match(r'^[^\d]').sum()
         if non_digit_count > 0:
             print("WARNING - Glascow_coma_scale_motor_response --- non digit start value counts -- ", non_digit_count)
@@ -40,7 +40,7 @@ def unique_handle_for_non_numeric_gsw(df: pd.DataFrame):
             'No Response': '1 No Response',
             'No Response-ETT': '1 No Response-ETT'
         }
-        df['Glascow_coma_scale_verbal_response'].replace(value_mapping, inplace=True)
+        df['Glascow_coma_scale_verbal_response'] = df['Glascow_coma_scale_verbal_response'].replace(value_mapping)
         non_digit_count = df['Glascow_coma_scale_verbal_response'].str.match(r'^[^\d]').sum()
         if non_digit_count > 0:
             print("WARNING - Glascow_coma_scale_verbal_response --- non digit start value counts -- ", non_digit_count)
