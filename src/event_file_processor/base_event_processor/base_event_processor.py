@@ -1,6 +1,7 @@
 
 from typing import Optional
-from src.gsw_string_values_handler import number_to_gsw_str
+from src.helpers.episode_data_utils import episode_numpy_to_dataframe
+from src.helpers.gsw_string_values_handler import number_to_gsw_str
 from src.event_file_processor.event_file_processor import EventFileProcessor
 from src.file_utils import load_json
 
@@ -19,7 +20,7 @@ class BaseEventProcessor(EventFileProcessor):
 
     def process_instance(self, instance):
         super().process_instance(instance)
-        df = super().episode_numpy_to_dataframe(instance)
+        df = episode_numpy_to_dataframe(instance, self.string_types_columns)
         if self.interval_size:
             df['Hours'] = (df['Hours'] // self.interval_size) * self.interval_size
             # GSW to numeric

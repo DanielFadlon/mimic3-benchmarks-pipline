@@ -1,9 +1,8 @@
-from typing import Dict, Optional, Callable
-
-import numpy as np
+from typing import Optional, Callable
 import pandas as pd
+from src.helpers.episode_data_utils import episode_numpy_to_dataframe
+from src.period_file_processor.period_interval_utils import group_episode_df_to_intervals
 from src.file_utils import load_json
-from src.gsw_string_values_handler import number_to_gsw_str
 from src.period_file_processor.period_file_processor import PeriodFileProcessor
 
 HOURS_TEMP_COLUMN_NAME = 'hours_tmp'
@@ -13,31 +12,29 @@ class IWPeriodProcessor(PeriodFileProcessor):
                  task: str,
                  set_type: str,
                  history_volume: int,
-                 agg_func: Optional[Callable] = max, # max, mean, median
                  interval_size: Optional[str] = None,
+                 agg_function_by_column_json_path: Optional[str] = "configs/event_agg_function_by_column.json",
                  feature_name_mapping_path: Optional[str] = "configs/feature_name_mapping.json"):
-        super().__init__(task, set_type)
+
+        super().__init__(task, set_type, interval_size)
         self.history_volume = history_volume
         self.interval_size = interval_size
-        self.agg_func = agg_func
+        self.agg_function_by_column_json_path = agg_function_by_column_json_path
         self.feature_name_mapping = load_json(feature_name_mapping_path)
-
 
     def process_instance(self, instance):
         super().process_instance(instance)
-        df = super().episode_numpy_to_dataframe(instance)
+        df = episode_numpy_to_dataframe(instance, self.string_types_columns)
 
         df[HOURS_TEMP_COLUMN_NAME] = df['Hours'].astype(int)
         if self.interval_size:
-            df[HOURS_TEMP_COLUMN_NAME] = df['Hours'].transform(lambda x: int((x // self.interval_size) * self.interval_size))
-            # GSW to numeric
-            for col in self.string_types_columns:
-                df[col] = df[col].apply(lambda s: int(s[0]) if s is not None else s)
-            df = df.groupby([HOURS_TEMP_COLUMN_NAME]).agg(self.agg_func).reset_index()
-            # Back to GSW str value
-            for col in self.string_types_columns:
-                df[col] = df[col].apply(lambda n: number_to_gsw_str(col, n))
-
+                df = group_episode_df_to_intervals(
+                    df,
+                    self.interval_size,
+                    col_name_of_interval_time=HOURS_TEMP_COLUMN_NAME,
+                    gsw_string_types_columns=self.string_types_columns,
+                    agg_function_by_column_json_path=self.agg_function_by_column_json_path
+                )
         df = df.sort_values(by=['Hours'])
         history_text = ""
         for feat in df.columns:

@@ -46,8 +46,6 @@ def process_instance(self, instance):
 - Returns a DataFrame indexed by `['episode', 'TimeFromHosp']`
 - Saves output as a `.parquet` file
 
-### `episode_numpy_to_dataframe(episode_data: np.array)`
-
 - Parses raw data into a cleaned `DataFrame`
 
 ---

@@ -4,8 +4,8 @@ import concurrent.futures
 import numpy as np
 import pandas as pd
 
-from src.gsw_string_values_handler import GSW_STR_COLUMNS_NAMES, unique_handle_for_non_numeric_gsw
-from src.get_reader import get_reader
+from src.helpers.gsw_string_values_handler import GSW_STR_COLUMNS_NAMES
+from src.helpers.get_reader import get_reader
 
 class EventFileProcessor:
     def __init__(self,
@@ -35,9 +35,9 @@ class EventFileProcessor:
 
     def process(self, output_dir: str):
         res_dfs_list = []
-        num_cases = 100 #self.listfile.shape[0]
+        num_cases = self.listfile.shape[0]
 
-        num_threads = 10#32  # Number of threads to use
+        num_threads = 32  # Number of threads to use
         range_per_thread = num_cases // num_threads  # Each thread works on an equal range
 
 
@@ -68,20 +68,4 @@ class EventFileProcessor:
 
         res_df.to_parquet(os.path.join(output_dir, f'{self.set_type}.parquet'))
         print("FINISH - ", self.set_type)
-
-
-    def episode_numpy_to_dataframe(self, episode_data: np.array):
-        columns = [h.replace(' ', '_') for h in episode_data['header']]
-        numeric_columns = [col for col in columns if col not in self.string_types_columns]
-        non_numeric_cols = self.string_types_columns
-
-        df = pd.DataFrame(episode_data['X'], columns=columns)
-        df[numeric_columns] = df[numeric_columns].apply(pd.to_numeric, errors='coerce', axis=0)
-
-        # ASUMMING that the NON NUMERIC COLUMNS are Glascow_comma_scale
-        df[non_numeric_cols] = df[non_numeric_cols].replace('', None)
-        df = unique_handle_for_non_numeric_gsw(df)
-
-        df['episode'] = episode_data['name'][:-4] # Remove '.csv' suffix
-        return df
 
